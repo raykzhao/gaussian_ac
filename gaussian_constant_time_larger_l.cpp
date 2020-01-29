@@ -28,7 +28,7 @@ static const double INT64_DOUBLE_FACTOR = 1.0 / (1LL << FP_PRECISION);
 #define FP_MASK ((1LL << FP_PRECISION) - 1)
 
 /* Parameters used by FACCT */
-#define COMP_ENTRY_SIZE 9
+#define COMP_ENTRY_SIZE 10
 #define EXP_MANTISSA_PRECISION 52
 #define EXP_MANTISSA_MASK ((1LL << EXP_MANTISSA_PRECISION) - 1)
 #define R_MANTISSA_PRECISION (EXP_MANTISSA_PRECISION + 1)
@@ -39,7 +39,7 @@ static const double INT64_DOUBLE_FACTOR = 1.0 / (1LL << FP_PRECISION);
 #define NORM_BATCH 8 /* The AVX2 Box-Muller sampler returns 8 samples in batch */
 #define DISCRETE_BYTES (1 + NORM_BATCH * COMP_ENTRY_SIZE)
 
-static const double SIGMA = 32768.0; /* sigma=2, 32768, 131072 in our benchmark */
+static const double SIGMA = 1048576.0; /* sigma=1048576 in our benchmark */
 static const double DISCRETE_NORMALISATION = 0.5 * M_SQRT1_2 * M_2_SQRTPI * (1.0 / SIGMA); /* 1/S=1/(sigma*sqrt(2*pi)) */
 static const double SIGMA_INV = -1.0 / (2 * SIGMA * SIGMA); /* -1/sigma^2 */
 static const double M_1_LN2 = 1.0 / M_LN2;
@@ -143,7 +143,7 @@ static inline int64_t comp(const unsigned char *r, const uint64_t res)
 	res_exponent = R_EXPONENT_L - 1023 + 1 + (res >> EXP_MANTISSA_PRECISION); 
 	
 	r1 = *((uint64_t *)r);
-	r2 = (uint64_t)(r[8]);
+	r2 = (uint64_t)(*((uint16_t *)(r + 8)));
 	
 	r_mantissa = r1 & R_MANTISSA_MASK;
 	r_exponent = (r1 >> R_MANTISSA_PRECISION) | (r2 << (64 - R_MANTISSA_PRECISION));
