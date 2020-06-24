@@ -1,6 +1,6 @@
 # gaussian_ac
 
-## Moved to [gitlab](https://githlab.com/raykzhao/gaussian_ac).
+## Moved to [gitlab](https://gitlab.com/raykzhao/gaussian_ac).
 
 This is the implementation source code for the paper: 
 
